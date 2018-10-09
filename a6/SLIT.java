@@ -26,7 +26,7 @@ class SLIT {
 
       For example, if the input matrix is:
 
-      TTTACTCT     and r = 5 then T = 1 and the method returns -6
+      TTTACTCT     and r = 5 then T = 1 and the method returns -7
       CTTTTTGG         c = 3      R = 7
       AGTTATCT         w = 4
       TAATTTTT
@@ -36,10 +36,15 @@ class SLIT {
       TGCTTTTT
   */
   static int count(char[][] mat, int r, int c, int w) {
-
-    /* To be completed */
-
-    return -1;
+    int T = 0;
+    for(int i =r; i<r+1; i++){
+      for(int j=c; j<j+w-1; j++){
+        if(mat[i][j] == "T"){
+          T++;
+        }
+      }
+    }
+    return T;
   }// count method
 
   /* your implementation of the brute-force algorithm whose pseudocode is
