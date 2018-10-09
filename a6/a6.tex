@@ -1,0 +1,307 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amssymb,latexsym,enumitem,qtree,comment,color,ifthen}
+\usepackage{algorithmicx,algorithm,algpseudocode}
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+\setlength{\textwidth}{7.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\up}[1]{\vspace*{-#1mm}}
+\renewcommand{\arraystretch}{1.8}
+\newcommand{\qed}{\hfill$\square$}
+\newcommand{\assignNum}{6}
+\newcommand{\numPoints}{40}
+\newcommand{\dueDate}{Monday 10/15/2018}
+\newcommand{\pbStatement}[2]{
+  \colorbox{yellow}{\parbox[t]{0.93\textwidth}
+        {\bf (#1 \ifthenelse{#1 > 1}{points}{point})
+          #2}}}
+\newcommand{\morePbStatement}[1]{
+  \colorbox{yellow}{\parbox[t]{0.93\textwidth}
+        {\bf #1}}}
+\newcommand{\fillIn}[1]{\fbox{\parbox[t]{0.93\textwidth}{\it #1}}}
+\newcommand{\header}{
+\noindent{\textit{CS 321 - Algorithms - Fall 2018\hfill \yourName}}
+\begin{center}
+  \textbf{\Large Assignment \assignNum}\\\bigskip
+  \colorbox{red}{\Large\bf
+     \textcolor{white}{Due BEFORE 8:00AM on  \dueDate}}\\\bigskip
+
+  On time /  20\% off / no credit\\\bigskip
+
+  \textbf{Total points: \numPoints}
+  \bigskip
+
+  \hrule\medskip You are allowed to work with a partner on this
+  assignment. If you decide to form a pair, make sure to include
+  both names above, but submit only one zip file to D2L.
+  \medskip \hrule \end{center}
+
+\medskip
+This assignment will develop your algorithmic design skills. More
+specifically, it will  make you more comfortable with the divide-and-conquer
+paradigm.  You must write up your solutions to this assignment IN THIS
+FILE using \LaTeX\ by filling in all of the boxes below. If your
+submitted \texttt{.tex} file does not compile, then you will receive 0
+points. You should NOT add any \LaTeX\ packages to your \texttt{.tex}
+file.\newline
+
+Since this assignment includes a programming component, you must also
+complete and submit the \texttt{SLIT.java} file.
+
+
+
+
+\medskip
+\textbf{Submission procedure:}
+\begin{enumerate}[itemsep=-2mm]
+
+\item Complete this file, called \texttt{a\assignNum .tex}, with your
+  full name(s) and answers typed up below.
+
+\item Compile this file to produce a file called \texttt{a\assignNum .pdf}. Make
+sure that this file compiles properly and that its contents and appearance meet
+the requirements described in this handout.
+
+\item Create a directory called \texttt{a\assignNum} and copy exactly
+  three files into this directory, namely:\up{4}
+
+  \begin{itemize}[itemsep=-1mm]
+  \item \texttt{a\assignNum .tex} (this file with all of your answers added)
+  \item \texttt{a\assignNum .pdf} (the compiled version of the file above)
+  \item \texttt{SLIT.java} (your completed Java code file)
+  \end{itemize}
+
+\item Zip up this directory to yield a file called \texttt{a\assignNum .zip}
+
+\item Submit this zip file to the D2L dropbox for A\assignNum\  before the
+deadline above.
+
+\item BEFORE the beginning of class on the due date above, submit a
+single-sided, hard copy of your:
+  \begin{itemize}
+    \item \texttt{a\assignNum .pdf} file
+    \item completed \texttt{SLIT.java} file, making sure that your name(s) are
+      in the top documentation block and that you stated whether or not each
+      algorithm works as expected. For FULL credit, your hard copy of the code
+      MUST be properly indented, contain no lines that wrap around (i.e., with
+      a length greater than the page width), and be fully legible
+      and easily understandable.
+  \end{itemize}
+
+\end{enumerate}
+}% end of header command
+
+%************************************
+% No need to modify anything above this line
+% but DO fill this in!
+
+\newcommand{\yourName}{\fbox{Your name(s) go here}}
+
+%************************************g
+
+\begin{document}
+\header
+\newpage
+
+\textbf{Problem statement}\medskip
+
+In this assignment, you will implement two solutions to the following
+problem:\medskip
+
+\noindent\fbox{\centerline{\bf SLIT problem}}
+\begin{description}[align=left]
+  \item [\bf Input:] An $n\times n$ matrix $m$ whose elements come
+    from the set \{`{\tt A}', `{\tt C}', `{\tt G}', `{\tt T}'\}
+  \item [\bf Output:] The size $s$ of the largest imbalance in Thymine
+    within any slit window in $m$, where:\up{2}
+    \begin{itemize}
+    \item a slit window is a rectangular sub-matrix of $m$ with height 2
+      and any positive width, and
+    \item $s$ is computed as the total number of `{\tt T}' elements
+      minus the total number of `{\tt A}', `{\tt C}', and `{\tt G}'
+      elements in the window.
+    \end{itemize}
+\end{description}
+\hrule\bigskip
+
+The first solution you will implement is given to you in pseudocode
+format, as follows:
+
+\begin{algorithm}[H]
+    \caption{Brute-force SLIT algorithm}
+    \label{euclid}
+    \begin{algorithmic}[1] % number = starting value for line numbers
+
+      \Function{count}{$m,r,c,w$}
+
+      \Comment{\begin{minipage}{0.93\linewidth}This is a helper
+          function that returns the total number of non-T bases
+          subtracted from the total number of T bases within the
+          sub-matrix of $m$ whose top-left corner is at $r\times c$,
+          whose width is equal to $w$ columns, and whose height is
+          equal to two rows\end{minipage}}
+      \EndFunction
+      \Function{BF\_SLIT}{$m,n$} \Comment{m: 2D matrix}
+
+      \Comment{n: \# of top rows and left columns of $m$ that are part of this
+      problem instance}
+
+      \State $slit \gets 0$
+      \For{each $row \in[0..(n-2)]$}
+      \Comment{$row$ is the index of the row in the top-left corner
+        of the slit}
+          \For{each $col \in [0..(n-1)]$}
+          \Comment{$col$ is the index of the column in the top-left
+            corner of the slit}
+                 \For{each $w \in  [1..(n-col)]$}
+                  \Comment{$w$ is the number of columns in the slit}
+                        \State $slit \gets max(slit,count(m,row,col,w))$
+                 \EndFor
+          \EndFor
+      \EndFor
+      \State \textbf{return} $slit$
+      \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+
+You will have to design another algorithm that has a better
+asymptotic running time than the brute-force algorithm given above.
+Here are the detailed requirements for this assignment.
+
+\begin{enumerate}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item                            % Question 1
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     {\bf \color{red} (5 points) What is the big-theta bound on the worst-case
+       running time of the brute-force algorithm?}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     Answer: $\Theta$( \fbox{Your answer goes here} )
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  {\bf \color{red} Prove your answer by computing the exact worst-case
+  running time.}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \fillIn{Your proof goes here}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item                            % Question 2
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   {\bf \color{red} (6 points) Implement the brute-force algorithm, that is, the
+   two methods called {\tt count} and {\tt algorithm1} in the file {\tt
+   SLIT.java}. For this question, you may NOT modify any other part of the code
+   handout besides the BODY OF THESE TWO METHODS.}\medskip
+
+\fillIn{Your answer to this problem will be fully contained in the
+  {\tt SLIT.java} file that you submit}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item                            % Question 3
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    {\bf \color{red} (8 points) Design an algorithm whose worst-case running time is
+    asymptotically better than your answer to the previous question. Your
+    algorithm must use the divide-and-conquer approach. You must describe in
+    precise and concise English prose the main idea(s) behind your algorithm by
+    filling in the following four descriptions.}
+
+   {\bf \color{red} a. Divide step}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \fillIn{Your description of the divide step goes here}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+   {\bf \color{red} b. Conquer step}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \fillIn{Your description of the conquer step goes here}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+   {\bf \color{red} c. Combine step}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \fillIn{Your description of the combine step goes here}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+   {\bf \color{red} d. Base case(s)}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     \fillIn{Your definition of the base case(s) goes here, as well as what
+       processing must be done in this case(s)}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \item                            % Question 4
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {\bf \color{red} (7 points) Fully specify your algorithm in pseudocode
+    format using the \LaTeX\ packages included in this file (just like in
+    earlier assignments). Each recursive call of your algorithm must use $O(1)$
+    additional space.}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \fillIn{Your pseudocode goes here}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \item                            % Question 5
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      {\bf \color{red} (2 points) What is the FULL DEFINITION of the recurrence
+      that describes your algorithm?}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     Answer: \fbox{Your answer goes here}
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \item                            % Question 6
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      {\bf \color{red} (2 points) What is the solution to the recurrence you
+      gave as an answer to Question 5 above?}
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     Answer: $\Theta$( \fbox{Your answer goes here} )
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item                            % Question 7
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {\bf \color{red} (8 points) Implement your algorithm, that is, the body of the
+      method called {\tt algorithm2} in the file {\tt SLIT.java} as
+      well as any helper methods that you need (these, MUST be added
+      just below the {\tt algorithm2} method). For this question, you
+      may NOT modify any other part of the code handout. Recall that each
+      recursive call of your algorithm must use $O(1)$ additional space.}
+
+    \fillIn{Your answer to this problem will be fully contained in the
+      {\tt SLIT.java} file that you submit}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item                            % Question 7
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {\bf \color{red} (2 points) Run the driver code provided in {\tt A6.java}
+      without modifying it. You MUST use the seed value of 1 in the
+      output that you include below. You may interrupt the execution
+      of the driver once the brute-force algorithm takes more than
+      five minutes to complete. Include the output of this run below.
+      }
+
+    \fillIn{Delete this box; then copy and paste the full output of your code
+    below within a {\tt verbatim} environment. }
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{verbatim}
+<your output must replace this line>
+\end{verbatim}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \end{enumerate}
+
+  \end{document}
