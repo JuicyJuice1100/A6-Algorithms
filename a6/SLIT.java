@@ -38,8 +38,8 @@ class SLIT {
   static int count(char[][] mat, int r, int c, int w) {
     int numberT = 0;
     int nonNumberT = 0;
-    for(int i =r; i<r+1; i++){
-      for(int j=c; j<j+w-1; j++){
+    for(int i =r; i<=r+1; i++){
+      for(int j=c; j<=j+w-1; j++){
         if(mat[i][j] == 'T'){
           numberT++;
         }
