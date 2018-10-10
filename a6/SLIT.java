@@ -40,7 +40,7 @@ class SLIT {
     int nonNumberT = 0;
     for(int i =r; i<r+1; i++){
       for(int j=c; j<j+w-1; j++){
-        if(mat[i][j] == "T"){
+        if(mat[i][j] == 'T'){
           numberT++;
         }
         else{
@@ -58,10 +58,10 @@ class SLIT {
 
     int slit =0;
 
-    for(int row =0; row=<n-2; row++){
-      for(int col=0; col=<n-1; col++){
-        for(int w=1; w=<n-col;w++){
-        slit=max(slit,count(mat,row,col,w));
+    for(int row =0; row<=n-2; row++){
+      for(int col=0; col<=n-1; col++){
+        for(int w=1; w<=n-col;w++){
+        slit=Math.max(slit,count(mat,row,col,w));
         }
       }
     }
