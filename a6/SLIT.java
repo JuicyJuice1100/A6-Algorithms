@@ -56,9 +56,17 @@ class SLIT {
   */
   static int algorithm1(char[][] mat, int n) {
 
-    /* To be completed */
+    int slit =0;
 
-    return -1;
+    for(int row =0; i=<n-2; i++){
+      for(int col=0; j=<n-1; j++){
+        for(int w=1; k=<n-col;w++){
+        slit=max(slit,count(mat,row,col,w));
+        }
+      }
+    }
+
+    return slit;
   }// algorithm1 method
 
   /* your implementation of the second algorithm, which you must design
