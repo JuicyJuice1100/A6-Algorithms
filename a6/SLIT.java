@@ -36,15 +36,19 @@ class SLIT {
       TGCTTTTT
   */
   static int count(char[][] mat, int r, int c, int w) {
-    int T = 0;
+    int numberT = 0;
+    int nonNumberT = 0;
     for(int i =r; i<r+1; i++){
       for(int j=c; j<j+w-1; j++){
         if(mat[i][j] == "T"){
-          T++;
+          numberT++;
+        }
+        else{
+          nonNumberT++;
         }
       }
     }
-    return T;
+    return numberT-nonNumberT;
   }// count method
 
   /* your implementation of the brute-force algorithm whose pseudocode is
