@@ -58,9 +58,9 @@ class SLIT {
 
     int slit =0;
 
-    for(int row =0; i=<n-2; i++){
-      for(int col=0; j=<n-1; j++){
-        for(int w=1; k=<n-col;w++){
+    for(int row =0; row=<n-2; row++){
+      for(int col=0; col=<n-1; col++){
+        for(int w=1; w=<n-col;w++){
         slit=max(slit,count(mat,row,col,w));
         }
       }
