@@ -12,7 +12,7 @@
             "console": "internalConsole",
             "stopOnEntry": false,
             "mainClass": "A6",
-            "args": "2"
+            "args": "1"
         },
         {
             "type": "java",
@@ -39,7 +39,7 @@
             "console": "internalConsole",
             "stopOnEntry": false,
             "mainClass": "A6",
-            "args": "2"
+            "args": "1"
         },
         {
             "type": "java",
