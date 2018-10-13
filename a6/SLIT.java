@@ -79,7 +79,7 @@ class SLIT {
     } 
 
     int slit = 0;
-    for(int row = 0; row <= n-2; row ++){
+    for(int row = 0; row <= n-2; row++){
       slit = Math.max(slit, maxTRec(m, 0, n, row));
     }
 
@@ -99,8 +99,8 @@ class SLIT {
     int maxL = maxTRec(m, l, mid, row);
     int maxR = maxTRec(m, mid + 1, r, row);
 
-    int maxSumL = Integer.MIN_VALUE;
-    int maxSumR = maxSumL;
+    int maxSumL = 0;
+    int maxSumR = 0;
     int sum = 0;
     for(int i = mid; i >= l; i--){
       sum += count(m, row, i, 1);
@@ -110,7 +110,7 @@ class SLIT {
     }
 
     sum = 0;
-    for(int j = mid; j < r; j++){
+    for(int j = mid + 1; j < r; j++){
       sum += count(m, row, j, 1);
       if(sum > maxSumR){
         maxSumR = sum;
