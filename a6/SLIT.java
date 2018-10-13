@@ -42,15 +42,12 @@ class SLIT {
     for (int i = r; i < r + 2; i++) {
       for (int j = c; j < c + w; j++) {
         if (mat[i][j] == 'T') {
-          // numberT++;
           sum++;
         } else {
-          // nonNumberT++;
           sum--;
         }
       }
     }
-    // return numberT - nonNumberT;
     return sum;
   }// count method
 
@@ -77,62 +74,50 @@ class SLIT {
    * your implementation of the second algorithm, which you must design
    */
   static int algorithm2(char[][] m, int n) {
-    if(n == 0){
+    if(n < 2){
       return 0;
     } 
-    if(n == 1){
-      return m[1][1] == 'T' ? 1 : -1; 
-    }
-    return algorithm2helper(m, 0, 0, n);
-  }// algorithm2 method
 
-  // static int algorithm2(char[][] m, int n){
-  //   // int slit = 0;
-  //   // for (int row = 0; row <= n-2; row++){
-  //   //   for(int col = 0; col <= n-1; row++){
-  //   //     slit = Math.min
-  //   //   }
-  //   // }
-  //   return -1;
-  // }//algorithm2 method
+    int slit = 0;
+    for(int row = 0; row <= n-2; row ++){
+      slit = Math.max(slit, maxTRec(m, 0, n, row));
+    }
+
+    return slit;
+  }// algorithm2 method
 
   /*
    * implement your helper method(s) below this point
    */
-   
-   //recursive method that returns 1/4 the array until we get a 2x2 matrix
-   //this was getting difficult to make it even faster so going with an easier method first
-   static int algorithm2helper(char[][] m, int row, int col, int n){
-     int middle = n/2;
-     //assuming that n is always even
-     if(n == 2){
-       //basecase
-       return count(m, row, col, n);
-     }
-     if(n % 2 != 0){
-      middle = n/2 + 1;
-     } 
-      //  need to finish recursive function
-      //  checks each quarter of matrix
-      int nw = algorithm2helper(m, row, col, middle);
-      int ne = algorithm2helper(m, row, middle, middle);
-      int sw = algorithm2helper(m, middle, col, middle);
-      int se = algorithm2helper(m, middle, middle, middle);
-      int slit = Math.max(nw + ne, sw + se);
-      slit = Math.min(slit, al);
 
+  static int maxTRec(char[][] m, int l, int r, int row){
+    if(l == r){
+      return count(m, row, l, 1);
+    }
 
-   }
+    int mid = (l + r)/2;
+    int maxL = maxTRec(m, l, mid, row);
+    int maxR = maxTRec(m, mid + 1, r, row);
 
-  //May not need, may be able to make this even faster
-  //  static int rowCount(char[] row, int n){
-  //    int count = 0;
-  //    for(int col = 0; col < n; col++){
-  //      if(row[col] != 'T'){
-  //        count++;
-  //      }
-  //    }
-  //    return count;
-  //  }
+    int maxSumL = Integer.MIN_VALUE;
+    int maxSumR = maxSumL;
+    int sum = 0;
+    for(int i = mid; i >= l; i--){
+      sum += count(m, row, i, 1);
+      if(sum > maxSumL){
+        maxSumL = sum;
+      }
+    }
 
+    sum = 0;
+    for(int j = mid; j < r; j++){
+      sum += count(m, row, j, 1);
+      if(sum > maxSumR){
+        maxSumR = sum;
+      }
+    }
+
+    return Math.max(Math.max(maxL, maxR), maxSumL + maxSumR);
+
+  }
 }// SLIT class
